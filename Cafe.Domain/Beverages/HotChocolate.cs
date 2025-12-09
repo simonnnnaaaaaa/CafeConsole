@@ -1,7 +1,7 @@
 ﻿
 namespace Cafe.Domain.Beverages
 {
-    internal class HotChocolate : IBeverage
+    public class HotChocolate : IBeverage
     {
         private const decimal HotChocolateCost = 3.00m;
         public string Name => "Hot Chocolate";
