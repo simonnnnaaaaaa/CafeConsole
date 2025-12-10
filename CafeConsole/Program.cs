@@ -36,14 +36,67 @@ namespace CafeConsole
 
             //////////////////////////////////////////////////////////////
 
-            IBeverage beverage = beverageFactory.Create("espresso");
+            //IBeverage beverage = beverageFactory.Create("espresso");
+            //IPricingStrategy pricingStrategy = new RegularPricing();
+
+            //var result = orderService.PlaceOrder(beverage, pricingStrategy);
+
+            //Console.WriteLine($"Total orders: {analytics.TotalOrders}");
+            //Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
+
+            var beverage = ChooseBaseBeverage(beverageFactory);
+
             IPricingStrategy pricingStrategy = new RegularPricing();
+            var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
 
-            var result = orderService.PlaceOrder(beverage, pricingStrategy);
+            PrintReceipt(resultOrder);
 
-            Console.WriteLine($"Total orders: {analytics.TotalOrders}");
-            Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit!");
+            Console.ReadKey();
+        }
+
+        private static IBeverage ChooseBaseBeverage(IBeverageFactory beverageFactory)
+        {
+            while (true)
+            {
+                Console.WriteLine("Choose your base beverage:");
+                Console.WriteLine("1) Espresso");
+                Console.WriteLine("2) Tea");
+                Console.WriteLine("3) Hot Chocolate");
+                Console.Write("Your choice: ");
+
+                string? input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        return beverageFactory.Create("espresso");
+
+                    case "2":
+                        return beverageFactory.Create("tea");
+
+                    case "3":
+                        return beverageFactory.Create("choc");
+
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.\n");
+                        break;
+                }
+            }
 
         }
+
+        private static void PrintReceipt(OrderReceiptDto result)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
+            Console.WriteLine($"Items: {result.Description}");
+            Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
+            Console.WriteLine($"Pricing: {result.PricingStrategyName}");
+            Console.WriteLine($"Total: {result.Total:F2}");
+        }
+
     }
 }
+
