@@ -47,7 +47,7 @@ namespace CafeConsole
             var beverage = ChooseBaseBeverage(beverageFactory);
             beverage = ChooseAddOns(beverage);
 
-            IPricingStrategy pricingStrategy = new RegularPricing();
+            IPricingStrategy pricingStrategy = ChoosePricingStrategy();
             var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
 
             PrintReceipt(resultOrder);
@@ -132,6 +132,32 @@ namespace CafeConsole
                     case "0":
                         Console.WriteLine($"Finished add-ons. Final drink: {beverage.Describe()}");
                         return beverage;
+
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        private static IPricingStrategy ChoosePricingStrategy()
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Choose one of he pricing options:");
+                Console.WriteLine("1) Regular");
+                Console.WriteLine("2) Happy Hour (-20%)");
+
+                string? input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        return new RegularPricing();
+
+                    case "2":
+                        return new HappyHourPricing();
 
                     default:
                         Console.WriteLine("Invalid option. Please try again.");
