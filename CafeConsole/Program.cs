@@ -45,6 +45,7 @@ namespace CafeConsole
             //Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
 
             var beverage = ChooseBaseBeverage(beverageFactory);
+            beverage = ChooseAddOns(beverage);
 
             IPricingStrategy pricingStrategy = new RegularPricing();
             var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
@@ -77,7 +78,7 @@ namespace CafeConsole
                         return beverageFactory.Create("tea");
 
                     case "3":
-                        return beverageFactory.Create("choc");
+                        return beverageFactory.Create("hot chocolate");
 
                     default:
                         Console.WriteLine("Invalid option. Please try again.\n");
@@ -85,6 +86,58 @@ namespace CafeConsole
                 }
             }
 
+        }
+
+        private static IBeverage ChooseAddOns(IBeverage beverage)
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Add-ons menu (you can add multiple):");
+                Console.WriteLine("1) Milk (+0.40)");
+                Console.WriteLine("2) Syrup (+0.50)");
+                Console.WriteLine("3) Extra shot (+0.80)");
+                Console.WriteLine("0) Done");
+                Console.Write("Your choice: ");
+
+                string? input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        beverage = new MilkDecorator(beverage);
+                        Console.WriteLine($"Added milk. Current drink: {beverage.Describe()}");
+                        break;
+
+                    case "2":   //De modificat cu siropuri concrete
+                        Console.Write("Enter syrup flavor (e.g. vanilla, caramel): ");
+                        string? flavor = Console.ReadLine();
+
+                        if (string.IsNullOrWhiteSpace(flavor))
+                        {
+                            Console.WriteLine("Flavor cannot be empty. Syrup not added.");
+                        }
+                        else
+                        {
+                            beverage = new SyrupDecorator(beverage, flavor);
+                            Console.WriteLine($"Added {flavor} syrup. Current drink: {beverage.Describe()}");
+                        }
+                        break;
+
+                    case "3":
+                        beverage = new ExtraShotDecorator(beverage);
+                        Console.WriteLine($"Added extra shot. Current drink: {beverage.Describe()}");
+                        break;
+
+                    case "0":
+                        Console.WriteLine($"Finished add-ons. Final drink: {beverage.Describe()}");
+                        return beverage;
+
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
         }
 
         private static void PrintReceipt(OrderReceiptDto result)
