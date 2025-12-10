@@ -36,139 +36,68 @@ namespace CafeConsole
 
             //////////////////////////////////////////////////////////////
 
-            //IBeverage beverage = beverageFactory.Create("espresso");
-            //IPricingStrategy pricingStrategy = new RegularPricing();
+            bool running = true;
 
-            //var result = orderService.PlaceOrder(beverage, pricingStrategy);
 
-            //Console.WriteLine($"Total orders: {analytics.TotalOrders}");
-            //Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
+            while (running)
+            {
+                Console.Clear();
+                Console.WriteLine("=== Cafe Console ===");
+                Console.WriteLine();
 
-            var beverage = ChooseBaseBeverage(beverageFactory);
-            beverage = ChooseAddOns(beverage);
+                var beverage = MenuHelper.ChooseBaseBeverage(beverageFactory);
+                beverage = MenuHelper.ChooseAddOns(beverage);
 
-            IPricingStrategy pricingStrategy = ChoosePricingStrategy();
-            var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
+                IPricingStrategy pricingStrategy = MenuHelper.ChoosePricingStrategy();
+                var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
 
-            PrintReceipt(resultOrder);
+                Console.WriteLine("=== Receipt ===");
+                PrintReceipt(resultOrder);
+                Console.WriteLine("===============");
+
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("1) Place another order");
+                Console.WriteLine("0) Exit");
+                Console.Write("Your choice: ");
+
+                var next = Console.ReadLine();
+
+                switch (next)
+                {
+                    case "1":
+                        break;
+
+                    case "0":
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid option. Returning to main menu...");
+                        // short pause so user can read the message
+                        Thread.Sleep(1000);
+                        break;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("=== Session analytics ===");
+            Console.WriteLine($"Total orders: {analytics.TotalOrders}");
+            Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
+
 
             Console.WriteLine();
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();
         }
 
-        private static IBeverage ChooseBaseBeverage(IBeverageFactory beverageFactory)
-        {
-            while (true)
-            {
-                Console.WriteLine("Choose your base beverage:");
-                Console.WriteLine("1) Espresso");
-                Console.WriteLine("2) Tea");
-                Console.WriteLine("3) Hot Chocolate");
-                Console.Write("Your choice: ");
+       
+       
 
-                string? input = Console.ReadLine();
-
-                switch (input)
-                {
-                    case "1":
-                        return beverageFactory.Create("espresso");
-
-                    case "2":
-                        return beverageFactory.Create("tea");
-
-                    case "3":
-                        return beverageFactory.Create("hot chocolate");
-
-                    default:
-                        Console.WriteLine("Invalid option. Please try again.\n");
-                        break;
-                }
-            }
-
-        }
-
-        private static IBeverage ChooseAddOns(IBeverage beverage)
-        {
-            while (true)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Add-ons menu (you can add multiple):");
-                Console.WriteLine("1) Milk (+0.40)");
-                Console.WriteLine("2) Syrup (+0.50)");
-                Console.WriteLine("3) Extra shot (+0.80)");
-                Console.WriteLine("0) Done");
-                Console.Write("Your choice: ");
-
-                string? input = Console.ReadLine();
-
-                switch (input)
-                {
-                    case "1":
-                        beverage = new MilkDecorator(beverage);
-                        Console.WriteLine($"Added milk. Current drink: {beverage.Describe()}");
-                        break;
-
-                    case "2":   //De modificat cu siropuri concrete
-                        Console.Write("Enter syrup flavor (e.g. vanilla, caramel): ");
-                        string? flavor = Console.ReadLine();
-
-                        if (string.IsNullOrWhiteSpace(flavor))
-                        {
-                            Console.WriteLine("Flavor cannot be empty. Syrup not added.");
-                        }
-                        else
-                        {
-                            beverage = new SyrupDecorator(beverage, flavor);
-                            Console.WriteLine($"Added {flavor} syrup. Current drink: {beverage.Describe()}");
-                        }
-                        break;
-
-                    case "3":
-                        beverage = new ExtraShotDecorator(beverage);
-                        Console.WriteLine($"Added extra shot. Current drink: {beverage.Describe()}");
-                        break;
-
-                    case "0":
-                        Console.WriteLine($"Finished add-ons. Final drink: {beverage.Describe()}");
-                        return beverage;
-
-                    default:
-                        Console.WriteLine("Invalid option. Please try again.");
-                        break;
-                }
-            }
-        }
-
-        private static IPricingStrategy ChoosePricingStrategy()
-        {
-            while (true)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Choose one of he pricing options:");
-                Console.WriteLine("1) Regular");
-                Console.WriteLine("2) Happy Hour (-20%)");
-
-                string? input = Console.ReadLine();
-
-                switch (input)
-                {
-                    case "1":
-                        return new RegularPricing();
-
-                    case "2":
-                        return new HappyHourPricing();
-
-                    default:
-                        Console.WriteLine("Invalid option. Please try again.");
-                        break;
-                }
-            }
-        }
+       
 
         private static void PrintReceipt(OrderReceiptDto result)
         {
-            Console.WriteLine();
             Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
             Console.WriteLine($"Items: {result.Description}");
             Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
