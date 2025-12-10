@@ -36,14 +36,75 @@ namespace CafeConsole
 
             //////////////////////////////////////////////////////////////
 
-            IBeverage beverage = beverageFactory.Create("espresso");
-            IPricingStrategy pricingStrategy = new RegularPricing();
+            bool running = true;
 
-            var result = orderService.PlaceOrder(beverage, pricingStrategy);
 
+            while (running)
+            {
+                Console.Clear();
+                Console.WriteLine("=== Cafe Console ===");
+                Console.WriteLine();
+
+                var beverage = MenuHelper.ChooseBaseBeverage(beverageFactory);
+                beverage = MenuHelper.ChooseAddOns(beverage);
+
+                IPricingStrategy pricingStrategy = MenuHelper.ChoosePricingStrategy();
+                var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
+
+                Console.WriteLine("=== Receipt ===");
+                PrintReceipt(resultOrder);
+                Console.WriteLine("===============");
+
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("1) Place another order");
+                Console.WriteLine("0) Exit");
+                Console.Write("Your choice: ");
+
+                var next = Console.ReadLine();
+
+                switch (next)
+                {
+                    case "1":
+                        break;
+
+                    case "0":
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid option. Returning to main menu...");
+                        // short pause so user can read the message
+                        Thread.Sleep(1000);
+                        break;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("=== Session analytics ===");
             Console.WriteLine($"Total orders: {analytics.TotalOrders}");
             Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
 
+
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit!");
+            Console.ReadKey();
         }
+
+       
+       
+
+       
+
+        private static void PrintReceipt(OrderReceiptDto result)
+        {
+            Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
+            Console.WriteLine($"Items: {result.Description}");
+            Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
+            Console.WriteLine($"Pricing: {result.PricingStrategyName}");
+            Console.WriteLine($"Total: {result.Total:F2}");
+        }
+
     }
 }
+
