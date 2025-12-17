@@ -1,16 +1,11 @@
 ﻿using Cafe.Application.Events;
 using Cafe.Application.Orders;
-using Cafe.Domain.Beverages;
 using Cafe.Domain.Events;
 using Cafe.Domain.Factories;
 using Cafe.Domain.Pricing;
 using Cafe.Infrastructure.Factories;
 using Cafe.Infrastructure.Observers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CafeConsole
 {
@@ -38,7 +33,6 @@ namespace CafeConsole
 
             bool running = true;
 
-
             while (running)
             {
                 Console.Clear();
@@ -52,7 +46,7 @@ namespace CafeConsole
                 var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
 
                 Console.WriteLine("=== Receipt ===");
-                PrintReceipt(resultOrder);
+                MenuHelper.PrintReceipt(resultOrder);
                 Console.WriteLine("===============");
 
                 Console.WriteLine();
@@ -74,7 +68,6 @@ namespace CafeConsole
 
                     default:
                         Console.WriteLine("Invalid option. Returning to main menu...");
-                        // short pause so user can read the message
                         Thread.Sleep(1000);
                         break;
                 }
@@ -89,20 +82,6 @@ namespace CafeConsole
             Console.WriteLine();
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();
-        }
-
-       
-       
-
-       
-
-        private static void PrintReceipt(OrderReceiptDto result)
-        {
-            Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
-            Console.WriteLine($"Items: {result.Description}");
-            Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
-            Console.WriteLine($"Pricing: {result.PricingStrategyName}");
-            Console.WriteLine($"Total: {result.Total:F2}");
         }
 
     }
