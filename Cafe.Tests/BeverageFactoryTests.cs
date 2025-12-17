@@ -12,7 +12,7 @@ namespace Cafe.Tests
             var factory = new BeverageFactory();
 
             // Act
-            IBeverage beverage = factory.Create("Espresso");
+            IBeverage beverage = factory.Create(TestConstants.Espresso);
 
             // Assert
             Assert.IsType<Espresso>(beverage);
@@ -25,7 +25,7 @@ namespace Cafe.Tests
             var factory = new BeverageFactory();
 
             // Act
-            IBeverage beverage = factory.Create("Tea");
+            IBeverage beverage = factory.Create(TestConstants.Tea);
             
             // Assert
             Assert.IsType<Tea>(beverage);
@@ -38,7 +38,7 @@ namespace Cafe.Tests
             var factory = new BeverageFactory();
 
             // Act
-            IBeverage beverage = factory.Create("Hot Chocolate");
+            IBeverage beverage = factory.Create(TestConstants.HotChocolate);
 
             // Assert
             Assert.IsType<HotChocolate>(beverage);
@@ -51,7 +51,7 @@ namespace Cafe.Tests
             var factory = new BeverageFactory();
 
             // Act + Assert
-            Assert.Throws<ArgumentException>(() => factory.Create("unknown"));
+            Assert.Throws<ArgumentException>(() => factory.Create(TestConstants.UnknownBeverage));
         }
     }
 }

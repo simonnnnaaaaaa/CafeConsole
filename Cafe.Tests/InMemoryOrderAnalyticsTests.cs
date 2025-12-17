@@ -1,10 +1,5 @@
 ﻿using Cafe.Domain.Events;
 using Cafe.Infrastructure.Observers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cafe.Tests
 {
@@ -19,14 +14,14 @@ namespace Cafe.Tests
             var order1 = new OrderPlaced(
                 Guid.NewGuid(),
                 DateTimeOffset.UtcNow,
-                "Order 1",
+                TestConstants.Order1,
                 Subtotal: 3.5m,
                 Total: 3.5m);
 
             var order2 = new OrderPlaced(
                 Guid.NewGuid(),
                 DateTimeOffset.UtcNow,
-                "Order 2",
+                TestConstants.Order2,
                 Subtotal: 2m,
                 Total: 2m);
 

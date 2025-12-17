@@ -19,8 +19,8 @@ namespace Cafe.Tests
 
             // Assert
             Assert.Equal(3.70m, cost); 
-            Assert.Contains("milk", description, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("extra shot", description, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(TestConstants.Milk, description, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(TestConstants.ExtraShot, description, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

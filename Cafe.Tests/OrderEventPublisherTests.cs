@@ -23,7 +23,7 @@ namespace Cafe.Tests
             var orderPlaced = new OrderPlaced(
                 Guid.NewGuid(),
                 DateTimeOffset.UtcNow,
-                "Test Order",
+                TestConstants.TestOrder,
                 Subtotal: 10m,
                 Total: 8m);
 
