@@ -17,8 +17,8 @@ namespace Cafe.Domain.Beverages
             Flavor = flavor ?? throw new ArgumentNullException(nameof(flavor));
         }
 
-        public override decimal Cost() => _beverage.Cost() + SyrupCost;
+        public override decimal Cost() => Beverage.Cost() + SyrupCost;
 
-        public override string Describe() => $"{_beverage.Describe()}, {Flavor} syrup";
+        public override string Describe() => $"{Beverage.Describe()}, {Flavor} syrup";
     }
 }

@@ -44,7 +44,7 @@ namespace CafeConsole
                 var beverage = MenuHelper.ChooseBaseBeverage(beverageFactory);
                 beverage = MenuHelper.ChooseAddOns(beverage);
 
-                SimulatePreparation(beverage);
+                PreparationHelper.SimulatePreparation(beverage);
 
                 IPricingStrategy pricingStrategy = MenuHelper.ChoosePricingStrategy();
                 var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
@@ -88,29 +88,7 @@ namespace CafeConsole
             Console.ReadKey();
         }
 
-        private static void SimulatePreparation(IBeverage beverage)
-        {
-            var preparation = BeveragePreparationFactory.Create(beverage.Name);
-
-            if (preparation is null)
-            {
-                return; 
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Preparing your beverage...");
-            Thread.Sleep(400);
-
-            foreach (var step in preparation.Prepare())
-            {
-                Console.WriteLine(step);
-                Thread.Sleep(400);
-            }
-
-            Console.WriteLine("Preparation finished!");
-            Thread.Sleep(400);
-            Console.WriteLine();
-        }
+        
 
     }
 }

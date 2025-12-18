@@ -1,27 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Cafe.Domain.Beverages;
 
 namespace Cafe.Domain.Preparation
 {
     public static class BeveragePreparationFactory
     {
-        public static BeveragePreparationTemplate Create(string beverageType)
+        public static BeveragePreparationTemplate Create(IBeverage beverage)
         {
-            if (string.IsNullOrWhiteSpace(beverageType))
+            if (beverage is null)
             {
                 return null;
             }
 
-            return beverageType.ToLower() switch
+            var baseBeverage = UnwrapBaseBeverage(beverage);
+
+            return baseBeverage switch
             {
-                "espresso" => new EspressoPreparation(),
-                "tea" => new TeaPreparation(),
-                "hot chocolate" => new HotChocolatePreparation(),
-                _ => throw new ArgumentException("Unknown beverage type")
+                Espresso => new EspressoPreparation(),
+                Tea => new TeaPreparation(),
+                HotChocolate => new HotChocolatePreparation(),
+                _ => null
             };
+        }
+
+        private static IBeverage UnwrapBaseBeverage(IBeverage beverage)
+        {
+            var current = beverage;
+
+            while (current is BeverageDecorator decorator)
+            {
+                current = decorator.InnerBeverage;
+            }
+
+            return current;
         }
     }
 }

@@ -1,14 +1,19 @@
 ﻿
+using Cafe.Domain.Beverages;
+
 namespace Cafe.Domain.Preparation
 {
     public abstract class BeveragePreparationTemplate
     {
-        public IEnumerable<string> Prepare()
+        public IEnumerable<string> Prepare(IBeverage beverage)
         {
             var steps = new List<string>();
 
             steps.Add(HeatWater());
             steps.Add(Brew());
+
+            steps.AddRange(AddOnSteps(beverage));
+
             steps.Add(Pour());
 
             var garnishStep = Garnish();
@@ -36,6 +41,35 @@ namespace Cafe.Domain.Preparation
         {
             // optional
             return null;
+        }
+
+        protected virtual IEnumerable<string> AddOnSteps(IBeverage beverage)
+        {
+            var steps = new List<string>();
+
+            var currentBeverage = beverage;
+
+            while (currentBeverage is BeverageDecorator decorator)
+            {
+                switch (currentBeverage)
+                {
+                    case MilkDecorator milkDecorator:
+                        steps.Add("Adding milk...");
+                        break;
+
+                    case SyrupDecorator syrupDecorator:
+                        steps.Add($"Adding {syrupDecorator.Flavor} syrup...");
+                        break;
+
+                    case BeverageDecorator otherDecorator:
+                        steps.Add("Pulling extra espresso shot...");
+                        break;
+                }
+
+                currentBeverage = decorator.InnerBeverage;
+            }
+
+            return steps;
         }
     }
 }
