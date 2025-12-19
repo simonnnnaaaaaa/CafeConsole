@@ -5,12 +5,12 @@ namespace Cafe.Domain.Preparation
     {
         protected override string Brew()
         {
-            return "Steeping tea bag...";
+            return PreparationConstants.SteepTeaBagStep;
         }
 
         protected override string Garnish()
         {
-            return "Adding lemon and honey...";
+            return PreparationConstants.GarnishTeaStep;
         }
     }
 }

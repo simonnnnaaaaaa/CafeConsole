@@ -27,14 +27,14 @@ namespace Cafe.Domain.Preparation
 
         protected virtual string HeatWater()
         {
-            return "Heating water...";
+            return PreparationConstants.HeatWaterStep;
         }
 
         protected abstract string Brew();
 
         protected virtual string Pour()
         {
-            return "Pouring beverage into cup...";
+            return PreparationConstants.PourBeverageStep;
         }
 
         protected virtual string? Garnish()
@@ -54,15 +54,15 @@ namespace Cafe.Domain.Preparation
                 switch (currentBeverage)
                 {
                     case MilkDecorator milkDecorator:
-                        steps.Add("Adding milk...");
+                        steps.Add(PreparationConstants.AddMilkStep);
                         break;
 
                     case SyrupDecorator syrupDecorator:
-                        steps.Add($"Adding {syrupDecorator.Flavor} syrup...");
+                        steps.Add(string.Format(PreparationConstants.AddSyerupStep, syrupDecorator.Flavor));
                         break;
 
                     case BeverageDecorator otherDecorator:
-                        steps.Add("Pulling extra espresso shot...");
+                        steps.Add(PreparationConstants.ExtraEspressoShotStep);
                         break;
                 }
 

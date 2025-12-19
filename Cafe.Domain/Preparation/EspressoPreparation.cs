@@ -5,7 +5,7 @@ namespace Cafe.Domain.Preparation
     {
         protected override string Brew()
         {
-            return "Extracting espresso shot...";
+            return PreparationConstants.ExtractEspressoStep;
         }
     
     }
