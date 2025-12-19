@@ -3,17 +3,19 @@ namespace Cafe.Domain.Beverages
 {
     public abstract class BeverageDecorator : IBeverage
     {
-        protected IBeverage _beverage;
+        protected IBeverage Beverage { get; }
+
+        public IBeverage InnerBeverage => Beverage;
 
         protected BeverageDecorator(IBeverage beverage)
         {
-            _beverage = beverage ?? throw new ArgumentNullException(nameof(beverage));
+            Beverage = beverage ?? throw new ArgumentNullException(nameof(beverage));
         }
 
-        public string Name => _beverage.Name;
+        public string Name => Beverage.Name;
 
         public abstract decimal Cost();
 
-        public virtual string Describe() => _beverage.Describe();
+        public virtual string Describe() => Beverage.Describe();
     }
 }

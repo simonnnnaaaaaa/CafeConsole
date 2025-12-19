@@ -1,7 +1,9 @@
 ﻿using Cafe.Application.Events;
 using Cafe.Application.Orders;
+using Cafe.Domain.Beverages;
 using Cafe.Domain.Events;
 using Cafe.Domain.Factories;
+using Cafe.Domain.Preparation;
 using Cafe.Domain.Pricing;
 using Cafe.Infrastructure.Factories;
 using Cafe.Infrastructure.Observers;
@@ -41,6 +43,8 @@ namespace CafeConsole
 
                 var beverage = MenuHelper.ChooseBaseBeverage(beverageFactory);
                 beverage = MenuHelper.ChooseAddOns(beverage);
+
+                PreparationHelper.SimulatePreparation(beverage);
 
                 IPricingStrategy pricingStrategy = MenuHelper.ChoosePricingStrategy();
                 var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
@@ -83,6 +87,8 @@ namespace CafeConsole
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();
         }
+
+        
 
     }
 }

@@ -14,8 +14,8 @@ namespace Cafe.Domain.Beverages
         {
         }
 
-        public override decimal Cost() => _beverage.Cost() + ExtraShotCost;
+        public override decimal Cost() => Beverage.Cost() + ExtraShotCost;
         
-        public override string Describe() => $"{_beverage.Describe()}, extra shot";
+        public override string Describe() => $"{Beverage.Describe()}, extra shot";
     }
 }
