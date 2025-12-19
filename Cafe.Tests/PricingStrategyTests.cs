@@ -32,5 +32,34 @@ namespace Cafe.Tests
             Assert.Equal(8m, result); 
         }
 
+        [Fact]
+        public void MemberPricing_ShouldApplyTenPercentDiscount()
+        {
+            // Arrange
+            var strategy = new MemberPricing();
+            var subtotal = 10m;
+
+            // Act
+            var result = strategy.ApplyPricing(subtotal);
+
+            // Assert
+            Assert.Equal(9m, result);
+        }
+
+        [Fact]
+        public void CouponPricing_WithFifteenPercent_ShouldApplyCorrectDiscount()
+        {
+            // Arrangej
+            var strategy = new CuponPricing(0.15m); 
+            var subtotal = 10m;
+
+            // Act
+            var result = strategy.ApplyPricing(subtotal);
+
+            // Assert
+            Assert.Equal(8.5m, result);
+        }
+
+
     }
 }

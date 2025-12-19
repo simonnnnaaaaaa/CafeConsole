@@ -2,11 +2,6 @@
 using Cafe.Domain.Beverages;
 using Cafe.Domain.Factories;
 using Cafe.Domain.Pricing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeConsole
 {
@@ -103,6 +98,8 @@ namespace CafeConsole
                 Console.WriteLine("Choose one of he pricing options:");
                 Console.WriteLine("1) Regular");
                 Console.WriteLine("2) Happy Hour (-20%)");
+                Console.WriteLine("3) Member (-10%)");
+                Console.WriteLine("4) Coupon (custom % discount)");
 
                 string? input = Console.ReadLine();
 
@@ -113,6 +110,11 @@ namespace CafeConsole
 
                     case "2":
                         return new HappyHourPricing();
+                    case "3":
+                        return new MemberPricing();
+
+                    case "4":
+                        return CreateCouponPricing();
 
                     default:
                         Console.WriteLine("Invalid option. Please try again.");
@@ -120,6 +122,32 @@ namespace CafeConsole
                 }
             }
         }
+
+        private static IPricingStrategy CreateCouponPricing()
+        {
+            Console.Write("Enter discount percentage (e.g. 15 for 15%): ");
+            string? percentInput = Console.ReadLine();
+
+            try
+            {
+                decimal percentage = Convert.ToDecimal(percentInput);
+
+                if (percentage > 0 && percentage < 100)
+                {
+                    decimal rate = percentage / 100m;
+                    return new CuponPricing(rate);
+                }
+
+                Console.WriteLine("Percentage must be between 0 and 100.");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid percentage value.");
+            }
+
+            return new RegularPricing();
+        }
+        
 
         public static void PrintReceipt(OrderReceiptDto result)
         {
