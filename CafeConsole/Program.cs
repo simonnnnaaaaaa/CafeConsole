@@ -1,11 +1,7 @@
 ﻿using Cafe.Application.Events;
 using Cafe.Application.Orders;
-using Cafe.Domain.Beverages;
 using Cafe.Domain.Events;
-using Cafe.Domain.Factories;
-using Cafe.Domain.Preparation;
-using Cafe.Domain.Pricing;
-using Cafe.Infrastructure.Factories;
+using Cafe.Infrastructure.Analytics;
 using Cafe.Infrastructure.Observers;
 using CafeConsole.States;
 
@@ -17,12 +13,30 @@ namespace CafeConsole
 
         static void Main(string[] args)
         {
-            
+
             //observers
             var analytics = new InMemoryOrderAnalytics();
             var logger = new ConsoleOrderLogger();
 
-            var orderEventObservers = new List<IOrderEventObserver> { analytics, logger };
+            // remote analytics (proxy)
+            IAnalyticsClient remoteClient = new FakeRemoteAnalyticsClient(failureRate: 0.30);
+            remoteClient = new LoggingAnalyticsClient(remoteClient, "Remote");
+            IAnalyticsClient fallbackClient = new NullAnalyticsClient();
+            fallbackClient = new LoggingAnalyticsClient(fallbackClient, "Fallback");
+
+
+            IAnalyticsClient analyticsProxy = new AnalyticsClientProxy(
+                inner: remoteClient,
+                fallback: fallbackClient,
+                maxRetries: 3,
+                baseDelayMs: 150
+            );
+
+            analyticsProxy = new LoggingAnalyticsClient(analyticsProxy, "Proxy");
+
+            var remoteAnalyticsObserver = new RemoteAnalyticsObserver(analyticsProxy);
+
+            var orderEventObservers = new List<IOrderEventObserver> { analytics, logger, remoteAnalyticsObserver };
 
             //publisher
             var eventPublisher = new OrderEventPublisher(orderEventObservers);
@@ -33,6 +47,8 @@ namespace CafeConsole
             //state
             var kiosk = new KioskContext(orderService, analytics);
 
+
+
             //////////////////////////////////////////////////////////////
 
             while (true)
@@ -41,7 +57,7 @@ namespace CafeConsole
             }
         }
 
-        
+
 
     }
 }
