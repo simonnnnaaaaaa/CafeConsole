@@ -2,6 +2,7 @@
 using Cafe.Domain.Beverages;
 using Cafe.Domain.Factories;
 using Cafe.Domain.Pricing;
+using Cafe.Infrastructure.Observers;
 
 namespace CafeConsole
 {
@@ -148,7 +149,6 @@ namespace CafeConsole
             return new RegularPricing();
         }
         
-
         public static void PrintReceipt(OrderReceiptDto result)
         {
             Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
@@ -156,6 +156,17 @@ namespace CafeConsole
             Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
             Console.WriteLine($"Pricing: {result.PricingStrategyName}");
             Console.WriteLine($"Total: {result.Total:F2}");
+        }
+
+        public static void PrintAnalytics(InMemoryOrderAnalytics analytics)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== Session analytics ===");
+            Console.WriteLine($"Total orders: {analytics.TotalOrders}");
+            Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
 
     }

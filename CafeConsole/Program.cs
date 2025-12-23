@@ -1,12 +1,9 @@
 ﻿using Cafe.Application.Events;
 using Cafe.Application.Orders;
-using Cafe.Domain.Beverages;
 using Cafe.Domain.Events;
-using Cafe.Domain.Factories;
-using Cafe.Domain.Preparation;
-using Cafe.Domain.Pricing;
-using Cafe.Infrastructure.Factories;
+using Cafe.Infrastructure.Analytics;
 using Cafe.Infrastructure.Observers;
+using CafeConsole.States;
 
 
 namespace CafeConsole
@@ -16,14 +13,30 @@ namespace CafeConsole
 
         static void Main(string[] args)
         {
-            //factory
-            IBeverageFactory beverageFactory = new BeverageFactory();
 
             //observers
             var analytics = new InMemoryOrderAnalytics();
             var logger = new ConsoleOrderLogger();
 
-            var orderEventObservers = new List<IOrderEventObserver> { analytics, logger };
+            // remote analytics (proxy)
+            IAnalyticsClient remoteClient = new FakeRemoteAnalyticsClient(failureRate: 0.30);
+            remoteClient = new LoggingAnalyticsClient(remoteClient, "Remote");
+            IAnalyticsClient fallbackClient = new NullAnalyticsClient();
+            fallbackClient = new LoggingAnalyticsClient(fallbackClient, "Fallback");
+
+
+            IAnalyticsClient analyticsProxy = new AnalyticsClientProxy(
+                inner: remoteClient,
+                fallback: fallbackClient,
+                maxRetries: 3,
+                baseDelayMs: 150
+            );
+
+            analyticsProxy = new LoggingAnalyticsClient(analyticsProxy, "Proxy");
+
+            var remoteAnalyticsObserver = new RemoteAnalyticsObserver(analyticsProxy);
+
+            var orderEventObservers = new List<IOrderEventObserver> { analytics, logger, remoteAnalyticsObserver };
 
             //publisher
             var eventPublisher = new OrderEventPublisher(orderEventObservers);
@@ -31,64 +44,20 @@ namespace CafeConsole
             //service
             IOrderService orderService = new OrderService(eventPublisher);
 
+            //state
+            var kiosk = new KioskContext(orderService, analytics);
+
+
+
             //////////////////////////////////////////////////////////////
 
-            bool running = true;
-
-            while (running)
+            while (true)
             {
-                Console.Clear();
-                Console.WriteLine("=== Cafe Console ===");
-                Console.WriteLine();
-
-                var beverage = MenuHelper.ChooseBaseBeverage(beverageFactory);
-                beverage = MenuHelper.ChooseAddOns(beverage);
-
-                PreparationHelper.SimulatePreparation(beverage);
-
-                IPricingStrategy pricingStrategy = MenuHelper.ChoosePricingStrategy();
-                var resultOrder = orderService.PlaceOrder(beverage, pricingStrategy);
-
-                Console.WriteLine("=== Receipt ===");
-                MenuHelper.PrintReceipt(resultOrder);
-                Console.WriteLine("===============");
-
-                Console.WriteLine();
-                Console.WriteLine("What would you like to do next?");
-                Console.WriteLine("1) Place another order");
-                Console.WriteLine("0) Exit");
-                Console.Write("Your choice: ");
-
-                var next = Console.ReadLine();
-
-                switch (next)
-                {
-                    case "1":
-                        break;
-
-                    case "0":
-                        running = false;
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid option. Returning to main menu...");
-                        Thread.Sleep(1000);
-                        break;
-                }
+                kiosk.Run();
             }
-
-            Console.WriteLine();
-            Console.WriteLine("=== Session analytics ===");
-            Console.WriteLine($"Total orders: {analytics.TotalOrders}");
-            Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
-
-
-            Console.WriteLine();
-            Console.WriteLine("Press any key to exit!");
-            Console.ReadKey();
         }
 
-        
+
 
     }
 }
