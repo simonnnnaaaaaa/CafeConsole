@@ -23,7 +23,7 @@ public sealed class LoggingAnalyticsClient : IAnalyticsClient
             _inner.Track(orderPlaced);
             Console.WriteLine($"[Analytics:{_name}] Success");
         }
-        catch (Exception ex)
+        catch (InvalidOperationException ex)
         {
             Console.WriteLine($"[Analytics:{_name}] Failed ({ex.GetType().Name})");
             throw;
