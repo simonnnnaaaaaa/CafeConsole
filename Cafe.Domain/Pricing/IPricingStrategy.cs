@@ -1,5 +1,4 @@
-﻿
-namespace Cafe.Domain.Pricing
+﻿namespace Cafe.Domain.Pricing
 {
     public interface IPricingStrategy
     {

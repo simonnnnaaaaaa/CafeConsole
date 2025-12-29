@@ -1,5 +1,4 @@
-﻿
-namespace Cafe.Domain.Preparation
+﻿namespace Cafe.Domain.Preparation
 {
     public class PreparationConstants
     {

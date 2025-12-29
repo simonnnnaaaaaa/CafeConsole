@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cafe.Domain.Beverages
+﻿namespace Cafe.Domain.Beverages
 {
     public class SyrupDecorator : BeverageDecorator
     {
-        private const decimal SyrupCost = 0.50m;
-
         public string Flavor { get; }
 
         public SyrupDecorator(IBeverage beverage, string flavor) : base(beverage)
@@ -17,8 +9,8 @@ namespace Cafe.Domain.Beverages
             Flavor = flavor ?? throw new ArgumentNullException(nameof(flavor));
         }
 
-        public override decimal Cost() => Beverage.Cost() + SyrupCost;
+        public override decimal Cost() => Beverage.Cost() + DomainConstants.SyrupCost;
 
-        public override string Describe() => $"{Beverage.Describe()}, {Flavor} syrup";
+        public override string Describe() => string.Format(DomainConstants.Syrup, Beverage.Describe, Flavor);
     }
 }

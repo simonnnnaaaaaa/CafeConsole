@@ -1,5 +1,4 @@
-﻿
-namespace Cafe.Application.Orders
+﻿namespace Cafe.Application.Orders
 {
     public class OrderReceiptDto
     {

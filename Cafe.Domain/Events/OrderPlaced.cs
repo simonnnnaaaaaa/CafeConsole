@@ -1,5 +1,4 @@
-﻿
-namespace Cafe.Domain.Events
+﻿namespace Cafe.Domain.Events
 {
     public sealed record OrderPlaced(
         Guid OrderId,
@@ -7,7 +6,7 @@ namespace Cafe.Domain.Events
         string Description,
         decimal Subtotal,
         decimal Total
-    );   ///MAI VEZI DESPRE RECORDS
+    );  
 
 
 }

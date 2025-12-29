@@ -1,5 +1,4 @@
-﻿
-namespace Cafe.Domain.Beverages
+﻿namespace Cafe.Domain.Beverages
 {
     public abstract class BeverageDecorator : IBeverage
     {
