@@ -15,7 +15,7 @@ namespace CafeConsole
             }
 
             Console.WriteLine();
-            Console.WriteLine("Preparing your beverage...");
+            Console.WriteLine(ConsoleUiConstants.PreparingBeverage);
             Thread.Sleep(400);
 
             foreach (var step in preparation.Prepare(beverage))
@@ -24,7 +24,7 @@ namespace CafeConsole
                 Thread.Sleep(400);
             }
 
-            Console.WriteLine("Base beverage preparation finished!");
+            Console.WriteLine(ConsoleUiConstants.BaseBeveragePreparationFinished);
             Thread.Sleep(400);
             Console.WriteLine();
         }

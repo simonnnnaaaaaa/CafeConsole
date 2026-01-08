@@ -12,14 +12,10 @@
 
             context.OrderResult = resultOrder;
 
-            Console.WriteLine();
-            Console.WriteLine("=== Receipt ===");
+            Console.WriteLine(StateConstants.ReceiptHeader);
             MenuHelper.PrintReceipt(resultOrder);
-            Console.WriteLine("===============");
-            Console.WriteLine();
-
-            Console.WriteLine();
-            Console.WriteLine("Press any key to return to main menu...");
+            Console.WriteLine(StateConstants.ReceiptFooter);
+            Console.WriteLine(StateConstants.PressAnyKeyToReturnToMenu);
             Console.ReadKey();
 
             context.State = new IdleState();

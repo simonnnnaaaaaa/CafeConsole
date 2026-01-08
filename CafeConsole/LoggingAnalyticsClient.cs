@@ -16,16 +16,16 @@ public sealed class LoggingAnalyticsClient : IAnalyticsClient
 
     public void Track(OrderPlaced orderPlaced)
     {
-        Console.WriteLine($"[Analytics:{_name}] Sending OrderPlaced...");
+        Console.WriteLine(ConsoleUiConstants.AnalyticsSending, _name);
 
         try
         {
             _inner.Track(orderPlaced);
-            Console.WriteLine($"[Analytics:{_name}] Success");
+            Console.WriteLine( ConsoleUiConstants.AnalyticsSuccess, _name);
         }
         catch (InvalidOperationException ex)
         {
-            Console.WriteLine($"[Analytics:{_name}] Failed ({ex.GetType().Name})");
+            Console.WriteLine(ConsoleUiConstants.AnalyticsFailed, _name, ex.GetType().Name);
             throw;
         }
     }
