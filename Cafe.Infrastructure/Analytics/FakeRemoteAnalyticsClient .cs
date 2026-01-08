@@ -21,7 +21,7 @@ namespace Cafe.Infrastructure.Analytics
         {
             if (_random.NextDouble() < _failureRate)
             {
-                throw new InvalidOperationException("Remote analytics API failed (simulated).");
+                throw new InvalidOperationException(InfrastructureConstants.RemoteAnalyticsApiFailed);
             }
         }
     }

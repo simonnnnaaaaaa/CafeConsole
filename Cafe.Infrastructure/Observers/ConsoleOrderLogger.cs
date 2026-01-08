@@ -12,9 +12,13 @@ namespace Cafe.Infrastructure.Observers
             }
 
             Console.WriteLine(
-            $"[Order LOG] {orderPlaced.OrderId} @ {orderPlaced.At:o} | " +
-            $"Items: {orderPlaced.Description} | " +
-            $"Subtotal: {orderPlaced.Subtotal:F2}, Total: {orderPlaced.Total:F2}");
+               InfrastructureConstants.OrderLogTemplate,
+               orderPlaced.OrderId,
+               orderPlaced.At,
+               orderPlaced.Description,
+               orderPlaced.Subtotal,
+               orderPlaced.Total
+           );
         }
     }
 }

@@ -13,7 +13,7 @@
 
 
         public const string Espresso = "Espresso";
-        public const string ExtraShot = "{0}, extra Shot";
+        public const string ExtraShot = "{0}, Extra Shot";
         public const string HotChocolate = "Hot Chocolate";
         public const string Milk = "{0}, milk";
         public const string Syrup = "{0}, {1} syrup";
