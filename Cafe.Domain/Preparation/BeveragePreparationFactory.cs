@@ -1,5 +1,4 @@
-﻿
-using Cafe.Domain.Beverages;
+﻿using Cafe.Domain.Beverages;
 
 namespace Cafe.Domain.Preparation
 {

@@ -5,7 +5,6 @@ using Cafe.Infrastructure.Analytics;
 using Cafe.Infrastructure.Observers;
 using CafeConsole.States;
 
-
 namespace CafeConsole
 {
     internal static class Program
@@ -20,9 +19,9 @@ namespace CafeConsole
 
             // remote analytics (proxy)
             IAnalyticsClient remoteClient = new FakeRemoteAnalyticsClient(failureRate: 0.30);
-            remoteClient = new LoggingAnalyticsClient(remoteClient, "Remote");
+            remoteClient = new LoggingAnalyticsClient(remoteClient, ConsoleUiConstants.Remote);
             IAnalyticsClient fallbackClient = new NullAnalyticsClient();
-            fallbackClient = new LoggingAnalyticsClient(fallbackClient, "Fallback");
+            fallbackClient = new LoggingAnalyticsClient(fallbackClient, ConsoleUiConstants.Fallback);
 
 
             IAnalyticsClient analyticsProxy = new AnalyticsClientProxy(
@@ -32,7 +31,7 @@ namespace CafeConsole
                 baseDelayMs: 150
             );
 
-            analyticsProxy = new LoggingAnalyticsClient(analyticsProxy, "Proxy");
+            analyticsProxy = new LoggingAnalyticsClient(analyticsProxy, ConsoleUiConstants.Proxy);
 
             var remoteAnalyticsObserver = new RemoteAnalyticsObserver(analyticsProxy);
 
@@ -47,18 +46,11 @@ namespace CafeConsole
             //state
             var kiosk = new KioskContext(orderService, analytics);
 
-
-
-            //////////////////////////////////////////////////////////////
-
             while (true)
             {
                 kiosk.Run();
             }
         }
-
-
-
     }
 }
 

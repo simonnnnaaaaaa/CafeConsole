@@ -1,16 +1,14 @@
-﻿using Cafe.Infrastructure.Observers;
-
-namespace CafeConsole.States
+﻿namespace CafeConsole.States
 {
     internal class IdleState : IKioskState
     {
         public void Handle(KioskContext context)
         {
             Console.Clear();
-            Console.WriteLine("=== Cafe Console ===");
-            Console.WriteLine("1) New order");
-            Console.WriteLine("0) Exit");
-            Console.Write("Your choice: ");
+            Console.WriteLine(StateConstants.CafeConsoleHeader);
+            Console.WriteLine(StateConstants.NewOreder1);
+            Console.WriteLine(StateConstants.Exit0);
+            Console.Write(StateConstants.YourChoice);
 
             var input = Console.ReadLine();
 
@@ -26,7 +24,7 @@ namespace CafeConsole.States
                     break;
 
                 default:
-                    Console.WriteLine("Invalid option.");
+                    Console.WriteLine(StateConstants.InvalidOption);
                     Thread.Sleep(1000);
                     break;
             }

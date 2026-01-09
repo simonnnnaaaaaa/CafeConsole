@@ -1,12 +1,10 @@
-﻿
-namespace Cafe.Domain.Beverages
+﻿namespace Cafe.Domain.Beverages
 {
     public class Espresso : IBeverage
     {
-        private const decimal EspressoCost = 2.50m;
-        public string Name => "Espresso";
+        public string Name => DomainConstants.Espresso;
 
-        public decimal Cost() => EspressoCost;
+        public decimal Cost() => DomainConstants.EspressoCost;
 
         public string Describe() => Name;
     }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cafe.Domain.Pricing
+﻿namespace Cafe.Domain.Pricing
 {
     public class CuponPricing : IPricingStrategy
     {
@@ -14,8 +8,7 @@ namespace Cafe.Domain.Pricing
         {
             if (discountRate <= 0 || discountRate >= 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(discountRate),
-                    "Discount rate must be between 0 and 1 (exclusive).");
+                throw new ArgumentOutOfRangeException(nameof(discountRate), DomainConstants.DiscountOutOfRangeMessage);
             }
             _discountRate = discountRate;
         }

@@ -12,27 +12,28 @@ namespace CafeConsole
         {
             while (true)
             {
-                Console.WriteLine("Choose your base beverage:");
-                Console.WriteLine("1) Espresso");
-                Console.WriteLine("2) Tea");
-                Console.WriteLine("3) Hot Chocolate");
-                Console.Write("Your choice: ");
+                Console.WriteLine(ConsoleUiConstants.ChooseBaseBeveragePrompt
+                    );
+                Console.WriteLine(ConsoleUiConstants.Esspresso1);
+                Console.WriteLine(ConsoleUiConstants.Tea2);
+                Console.WriteLine(ConsoleUiConstants.HotChocolate3);
+                Console.Write(ConsoleUiConstants.YourChoicePrompt);
 
                 string? input = Console.ReadLine();
 
                 switch (input)
                 {
                     case "1":
-                        return beverageFactory.Create("espresso");
+                        return beverageFactory.Create(ConsoleUiConstants.Espresso);
 
                     case "2":
-                        return beverageFactory.Create("tea");
+                        return beverageFactory.Create(ConsoleUiConstants.Tea);
 
                     case "3":
-                        return beverageFactory.Create("hot chocolate");
+                        return beverageFactory.Create(ConsoleUiConstants.HotChocolate);
 
                     default:
-                        Console.WriteLine("Invalid option. Please try again.\n");
+                        Console.WriteLine(ConsoleUiConstants.InvalidOption);
                         break;
                 }
             }
@@ -44,12 +45,12 @@ namespace CafeConsole
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine("Add-ons menu (you can add multiple):");
-                Console.WriteLine("1) Milk (+0.40)");
-                Console.WriteLine("2) Syrup (+0.50)");
-                Console.WriteLine("3) Extra shot (+0.80)");
-                Console.WriteLine("0) Done");
-                Console.Write("Your choice: ");
+                Console.WriteLine(ConsoleUiConstants.AddOnsMenuTitle);
+                Console.WriteLine(ConsoleUiConstants.Milk1);
+                Console.WriteLine(ConsoleUiConstants.Syrup2);
+                Console.WriteLine(ConsoleUiConstants.ExtraShot3);
+                Console.WriteLine(ConsoleUiConstants.Done0);
+                Console.Write(ConsoleUiConstants.YourChoicePrompt);
 
                 string? input = Console.ReadLine();
 
@@ -57,35 +58,35 @@ namespace CafeConsole
                 {
                     case "1":
                         beverage = new MilkDecorator(beverage);
-                        Console.WriteLine($"Added milk. Current drink: {beverage.Describe()}");
+                        Console.WriteLine(ConsoleUiConstants.AddedMilk, beverage.Describe());
                         break;
 
                     case "2":   //De modificat cu siropuri concrete
-                        Console.Write("Enter syrup flavor (e.g. vanilla, caramel): ");
+                        Console.Write(ConsoleUiConstants.EnterSyrupFlavorPrompt);
                         string? flavor = Console.ReadLine();
 
                         if (string.IsNullOrWhiteSpace(flavor))
                         {
-                            Console.WriteLine("Flavor cannot be empty. Syrup not added.");
+                            Console.WriteLine(ConsoleUiConstants.FlavorCannotBeEmpty);
                         }
                         else
                         {
                             beverage = new SyrupDecorator(beverage, flavor);
-                            Console.WriteLine($"Added {flavor} syrup. Current drink: {beverage.Describe()}");
+                            Console.WriteLine(string.Format(ConsoleUiConstants.AddedSyrup, flavor), beverage.Describe());
                         }
                         break;
 
                     case "3":
                         beverage = new ExtraShotDecorator(beverage);
-                        Console.WriteLine($"Added extra shot. Current drink: {beverage.Describe()}");
+                        Console.WriteLine(ConsoleUiConstants.AddedExtraShot, beverage.Describe());
                         break;
 
                     case "0":
-                        Console.WriteLine($"Finished add-ons. Final drink: {beverage.Describe()}");
+                        Console.WriteLine(ConsoleUiConstants.FinishedAddOns, beverage.Describe());
                         return beverage;
 
                     default:
-                        Console.WriteLine("Invalid option. Please try again.");
+                        Console.WriteLine(ConsoleUiConstants.InvalidOption);
                         break;
                 }
             }
@@ -95,12 +96,11 @@ namespace CafeConsole
         {
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Choose one of he pricing options:");
-                Console.WriteLine("1) Regular");
-                Console.WriteLine("2) Happy Hour (-20%)");
-                Console.WriteLine("3) Member (-10%)");
-                Console.WriteLine("4) Coupon (custom % discount)");
+                Console.WriteLine(ConsoleUiConstants.ChoosePricingOption);
+                Console.WriteLine(ConsoleUiConstants.RegularPricing1);
+                Console.WriteLine(ConsoleUiConstants.HappyHourPricing2);
+                Console.WriteLine(ConsoleUiConstants.MemberDiscountPricing3);
+                Console.WriteLine(ConsoleUiConstants.CuponPricing4);
 
                 string? input = Console.ReadLine();
 
@@ -118,7 +118,7 @@ namespace CafeConsole
                         return CreateCouponPricing();
 
                     default:
-                        Console.WriteLine("Invalid option. Please try again.");
+                        Console.WriteLine(ConsoleUiConstants.InvalidOption);
                         break;
                 }
             }
@@ -126,7 +126,7 @@ namespace CafeConsole
 
         private static IPricingStrategy CreateCouponPricing()
         {
-            Console.Write("Enter discount percentage (e.g. 15 for 15%): ");
+            Console.Write(ConsoleUiConstants.EnterCuponDiscountPrompt);
             string? percentInput = Console.ReadLine();
 
             try
@@ -139,33 +139,51 @@ namespace CafeConsole
                     return new CuponPricing(rate);
                 }
 
-                Console.WriteLine("Percentage must be between 0 and 100.");
+                Console.WriteLine(ConsoleUiConstants.PercentageOutOfRange);
             }
             catch (Exception)
             {
-                Console.WriteLine("Invalid percentage value.");
+                Console.WriteLine(ConsoleUiConstants.InvalidPercentage);
             }
 
             return new RegularPricing();
         }
-        
+
         public static void PrintReceipt(OrderReceiptDto result)
         {
-            Console.WriteLine($"Order {result.OrderId} @ {result.At:o}");
-            Console.WriteLine($"Items: {result.Description}");
-            Console.WriteLine($"Subtotal: {result.Subtotal:F2}");
-            Console.WriteLine($"Pricing: {result.PricingStrategyName}");
-            Console.WriteLine($"Total: {result.Total:F2}");
+            Console.WriteLine(
+                ConsoleUiConstants.ReceiptHeader,
+                result.OrderId,
+                result.At
+            );
+
+            Console.WriteLine(
+                ConsoleUiConstants.ReceiptItems,
+                result.Description
+            );
+
+            Console.WriteLine(
+                ConsoleUiConstants.ReceiptSubtotal,
+                result.Subtotal
+            );
+
+            Console.WriteLine(
+                ConsoleUiConstants.ReceiptPricing,
+                result.PricingStrategyName
+            );
+
+            Console.WriteLine(
+                ConsoleUiConstants.ReceiptTotal,
+                result.Total
+            );
         }
 
         public static void PrintAnalytics(InMemoryOrderAnalytics analytics)
         {
-            Console.WriteLine();
-            Console.WriteLine("=== Session analytics ===");
-            Console.WriteLine($"Total orders: {analytics.TotalOrders}");
-            Console.WriteLine($"Total revenue: {analytics.TotalRevenue:F2}");
-            Console.WriteLine();
-            Console.WriteLine("Press any key to exit...");
+            Console.WriteLine(ConsoleUiConstants.SessionAnalyticsHeader);
+            Console.WriteLine(ConsoleUiConstants.TotalOrders, analytics.TotalOrders);
+            Console.WriteLine(ConsoleUiConstants.TotalRevenue, analytics.TotalRevenue);
+            Console.WriteLine(ConsoleUiConstants.PressAnyKeyToExit);
             Console.ReadKey();
         }
 

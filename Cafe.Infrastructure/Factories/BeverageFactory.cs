@@ -1,5 +1,4 @@
-﻿
-using Cafe.Domain.Beverages;
+﻿using Cafe.Domain.Beverages;
 using Cafe.Domain.Factories;
 
 namespace Cafe.Infrastructure.Factories
@@ -10,15 +9,15 @@ namespace Cafe.Infrastructure.Factories
         {
             if (string.IsNullOrWhiteSpace(beverageType))
             {
-                throw new ArgumentException("Beverage key must be provided.", nameof(beverageType));
+                throw new ArgumentException(InfrastructureConstants.NullBeverageKey, nameof(beverageType));
             }
 
             return beverageType.ToLower() switch
             {
-                "espresso" => new Espresso(),
-                "tea" => new Tea(),
-                "hot chocolate" => new HotChocolate(),
-                _ => throw new ArgumentException($"Beverage type '{beverageType}' is not recognized.")
+                InfrastructureConstants.Espresso => new Espresso(),
+                InfrastructureConstants.Tea => new Tea(),
+                InfrastructureConstants.HotChocolate => new HotChocolate(),
+                _ => throw new ArgumentException(string.Format(InfrastructureConstants.BeverageTypeNotRecognized, beverageType))
             };
         }
     }

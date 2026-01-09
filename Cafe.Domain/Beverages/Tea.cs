@@ -1,12 +1,10 @@
-﻿
-namespace Cafe.Domain.Beverages
+﻿namespace Cafe.Domain.Beverages
 {
     public class Tea : IBeverage
     {
-        private const decimal TeaCost = 2.00m;
-        public string Name => "Tea";
+        public string Name => DomainConstants.Tea;
 
-        public decimal Cost() => TeaCost;
+        public decimal Cost() => DomainConstants.TeaCost;
 
         public string Describe() => Name;
     }
